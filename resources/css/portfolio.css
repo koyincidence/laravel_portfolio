@@ -1,0 +1,88 @@
+/* Portfolio styles (ported from the original style.css).
+   Imported from resources/css/app.css with:  @import './portfolio.css';  */
+
+:root { --fg: #000; --bg: #fff; color-scheme: light; }
+.dark { --fg: #fff; --bg: #000; color-scheme: dark; }
+
+html { scroll-behavior: smooth; }
+section[id] { scroll-margin-top: 5rem; }
+
+::selection { background: var(--fg); color: var(--bg); }
+
+:focus-visible { outline: 2px solid var(--fg); outline-offset: 3px; border-radius: 6px; }
+
+/* Shared components (replaces long repeated Tailwind class strings) */
+.line { border-color: color-mix(in srgb, var(--fg) 20%, transparent); }
+.pill, .icon-btn {
+  border: 1px solid color-mix(in srgb, var(--fg) 25%, transparent);
+  border-radius: 9999px;
+  transition: background-color .3s, color .3s, transform .3s;
+}
+.pill { display: inline-flex; align-items: center; justify-content: center; padding: .625rem 1.25rem; cursor: pointer; }
+.icon-btn { display: flex; width: 2.5rem; height: 2.5rem; align-items: center; justify-content: center; }
+.pill:hover, .icon-btn:hover { background: var(--fg); color: var(--bg); transform: translateY(-4px); }
+.tag { border: 1px solid color-mix(in srgb, var(--fg) 20%, transparent); border-radius: 9999px; padding: .25rem .75rem; font-size: .75rem; }
+
+.nl { display: block; white-space: nowrap; border-radius: 9999px; padding: .5rem 1rem; font-size: .875rem; opacity: .6; transition: background-color .3s, color .3s, opacity .3s; cursor: pointer; }
+.nl:hover, .nl[aria-current="true"] { opacity: 1; }
+.nl:hover { background: var(--fg); color: var(--bg); }
+.nl[aria-current="true"] { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--fg) 40%, transparent); }
+
+.outline-text { color: transparent; -webkit-text-stroke: 2px var(--fg); }
+
+/* Mobile menu */
+#menu { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .3s ease-out; }
+#menu ul { overflow: hidden; visibility: hidden; transition: visibility 0s .3s; }
+#menu.open { grid-template-rows: 1fr; }
+#menu.open ul { visibility: visible; transition-delay: 0s; }
+.mlink { display: block; padding: .75rem 1.25rem; font-size: 1.125rem; font-weight: 500; transition: background-color .3s, color .3s; }
+.mlink:hover { background: var(--fg); color: var(--bg); }
+#burger span { position: absolute; left: 0; height: 1px; width: 1.75rem; background: currentColor; transition: all .3s; }
+#b1 { top: .5rem; } #b2 { top: 1rem; }
+#burger[aria-expanded="true"] #b1 { top: .75rem; transform: rotate(45deg); }
+#burger[aria-expanded="true"] #b2 { top: .75rem; transform: rotate(-45deg); }
+
+/* Scroll reveal (only hides content when JS is running) */
+.js .reveal { opacity: 0; transform: translateY(1.5rem); transition: opacity .7s, transform .7s; }
+.js .reveal.in { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+  .cursor { display: none; }
+  .js .reveal { opacity: 1; transform: none; }
+}
+
+/* Hero photo: keeps the 4:5 portrait shape and fits one screen */
+@media (min-width: 768px) {
+  figure.hero-photo {
+    width: min(100%, max(14rem, calc((100svh - 24rem) * .8)));
+    margin-left: auto;
+  }
+}
+
+/* Slightly tighter pill nav just above the 1024px switch */
+@media (min-width: 1024px) and (max-width: 1139px) {
+  .nl { padding: .5rem .7rem; font-size: .8125rem; }
+}
+
+/* Carousels */
+.marquee {
+  overflow: hidden;
+  padding: 0.5rem 0;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+}
+.marquee-track { display: flex; width: max-content; animation: marquee 30s linear infinite; }
+.marquee:hover .marquee-track { animation-play-state: paused; }
+.marquee-group { display: flex; flex-shrink: 0; gap: 0.75rem; padding-right: 0.75rem; }
+@keyframes marquee { to { transform: translateX(-50%); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee { overflow-x: auto; -webkit-mask-image: none; mask-image: none; }
+  .marquee-track { animation: none; }
+  .marquee-group[aria-hidden="true"] { display: none; }
+}
+
+/* Opposite direction for the second carousel */
+.marquee-reverse .marquee-track { animation-direction: reverse; animation-duration: 38s; }
